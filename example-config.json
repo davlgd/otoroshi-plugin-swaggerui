@@ -1,4 +1,4 @@
 {
-  "swagger_url": "https://petstore.swagger.io/v2/swagger.json",
-  "title": "API Documentation"
+  "swagger_url": "https://api.example.com/openapi.json",
+  "title": "My API Docs"
 }
