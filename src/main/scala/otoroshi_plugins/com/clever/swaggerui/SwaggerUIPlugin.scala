@@ -175,7 +175,7 @@ class SwaggerUIPlugin extends NgBackendCall {
   override def useDelegates: Boolean = false
   override def multiInstance: Boolean = true
   override def core: Boolean = true
-  override def name: String = "Swagger UI Plugin"
+  override def name: String = "Swagger UI"
   override def description: Option[String] = "Serves a Swagger UI page from a configurable OpenAPI specification URL".some
   override def defaultConfigObject: Option[NgPluginConfig] = SwaggerUIConfig.default.some
   override def noJsForm: Boolean = true
@@ -188,7 +188,7 @@ class SwaggerUIPlugin extends NgBackendCall {
   override def configSchema: Option[JsObject] = SwaggerUIConfig.configSchema
 
   override def start(env: Env): Future[Unit] = {
-    env.logger.info("[Swagger UI Plugin] plugin is now available!")
+    env.logger.info("[Swagger UI] plugin is now available!")
     ().vfuture
   }
 
