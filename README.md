@@ -36,8 +36,9 @@ java -cp "otoroshi.jar:target/scala-2.12/otoroshi-swagger-ui-plugin_2.12-0.1.0.j
 ./test-local.sh
 ```
 
-Default credentials: `admin` / `password`
-Access: http://otoroshi.oto.tools:8080 (add `127.0.0.1 otoroshi.oto.tools` to `/etc/hosts`)
+To connect to Otoroshi Admin UI:
+- URL: http://otoroshi.oto.tools:8080
+- Credentials: `admin` / `password`
 
 ### Configuration
 
