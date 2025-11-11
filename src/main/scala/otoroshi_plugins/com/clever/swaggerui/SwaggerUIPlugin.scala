@@ -85,7 +85,7 @@ object SwaggerUIConfig {
       "type" -> "string",
       "label" -> "OpenAPI URL",
       "placeholder" -> "https://your-api.example.com/openapi.json",
-      "help" -> "URL pointing to your OpenAPI/Swagger JSON or YAML specification"
+      "help" -> "URL pointing to your OpenAPI JSON or YAML file"
     ),
     "title" -> Json.obj(
       "type" -> "string",
@@ -102,46 +102,70 @@ object SwaggerUIConfig {
     "filter" -> Json.obj(
       "type" -> "bool",
       "label" -> "Filter",
-      "help" -> "Enable search/filter bar for operations (default: true)"
+      "help" -> "Show search/filter field"
     ),
     "show_models" -> Json.obj(
       "type" -> "bool",
       "label" -> "Models",
-      "help" -> "Show model schemas by default (default: false = hide models)"
+      "help" -> "Show model schemas"
     ),
     "display_operation_id" -> Json.obj(
       "type" -> "bool",
       "label" -> "Operation ID",
-      "help" -> "Show operation IDs in the UI (default: false)"
+      "help" -> "Show operation IDs"
     ),
     "show_extensions" -> Json.obj(
       "type" -> "bool",
       "label" -> "Extensions",
-      "help" -> "Show vendor extension fields (x-*) (default: false)"
+      "help" -> "Show vendor extension fields (x-*)"
     ),
     "layout" -> Json.obj(
-      "type" -> "string",
+      "type" -> "select",
       "label" -> "Layout",
-      "placeholder" -> "BaseLayout",
-      "help" -> "UI layout style: BaseLayout or StandaloneLayout (default: BaseLayout)"
+      "props" -> Json.obj(
+        "options" -> Json.arr(
+          Json.obj("label" -> "Base Layout", "value" -> "BaseLayout"),
+          Json.obj("label" -> "Standalone Layout", "value" -> "StandaloneLayout")
+        )
+      )
     ),
     "sort_tags" -> Json.obj(
-      "type" -> "string",
+      "type" -> "select",
       "label" -> "Sort Tags",
-      "placeholder" -> "alpha",
-      "help" -> "Sort tags alphabetically: alpha or none (default: alpha)"
+      "props" -> Json.obj(
+        "options" -> Json.arr(
+          Json.obj("label" -> "Alphabetically", "value" -> "alpha"),
+          Json.obj("label" -> "Unsorted", "value" -> "none")
+        )
+      )
     ),
     "sort_ops" -> Json.obj(
-      "type" -> "string",
+      "type" -> "select",
       "label" -> "Sort Ops",
-      "placeholder" -> "alpha",
-      "help" -> "Sort operations: alpha, method, or none (default: alpha)"
+      "props" -> Json.obj(
+        "options" -> Json.arr(
+          Json.obj("label" -> "Alphabetically", "value" -> "alpha"),
+          Json.obj("label" -> "By Method", "value" -> "method"),
+          Json.obj("label" -> "Unsorted", "value" -> "none")
+        )
+      )
     ),
     "theme" -> Json.obj(
-      "type" -> "string",
+      "type" -> "select",
       "label" -> "Theme",
-      "placeholder" -> "default",
-      "help" -> "Optional swagger-ui-themes theme: default, feeling-blue, flattop, material, monokai, muted, newspaper, or outline"
+      "help" -> "Themes from swagger-ui-themes loaded from unpkg.com CDN",
+      "props" -> Json.obj(
+        "options" -> Json.arr(
+          Json.obj("label" -> "Default", "value" -> "default"),
+          Json.obj("label" -> "Feeling Blue", "value" -> "feeling-blue"),
+          Json.obj("label" -> "Flattop", "value" -> "flattop"),
+          Json.obj("label" -> "Material", "value" -> "material"),
+          Json.obj("label" -> "Monokai", "value" -> "monokai"),
+          Json.obj("label" -> "Muted", "value" -> "muted"),
+          Json.obj("label" -> "Newspaper", "value" -> "newspaper"),
+          Json.obj("label" -> "Outline", "value" -> "outline")
+        )
+      )
     )
   ))
 }
@@ -208,7 +232,7 @@ class SwaggerUIPlugin extends NgBackendCall {
     }
 
     val themeLink = if (config.theme.nonEmpty && config.theme != "default") {
-      s"""    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-themes/themes/3.x/theme-${config.theme}.css">"""
+      s"""    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-themes/themes/3.x/theme-${config.theme}.css">"""
     } else {
       ""
     }
