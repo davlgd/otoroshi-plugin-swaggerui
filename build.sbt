@@ -1,5 +1,5 @@
 name := "otoroshi-swagger-ui-plugin"
-organization := "com.clever"
+organization := "com.davlgd"
 scalaVersion := "2.12.20"
 
 lazy val root = (project in file("."))

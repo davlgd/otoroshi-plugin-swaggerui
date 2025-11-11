@@ -1,4 +1,4 @@
-package otoroshi_plugins.com.clever.swaggerui
+package otoroshi_plugins.com.davlgd.swaggerui
 
 import akka.stream.Materializer
 import otoroshi.env.Env
