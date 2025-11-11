@@ -49,11 +49,13 @@ In Otoroshi UI:
 3. Configure:
    - **swagger_url**: URL to your OpenAPI spec (JSON or YAML)
    - **title**: Browser tab title
+   - **swagger_ui_version** (optional): Swagger UI version (default: 5.30.2)
 
 ```json
 {
   "swagger_url": "https://api.example.com/openapi.json",
-  "title": "My API Docs"
+  "title": "My API Docs",
+  "swagger_ui_version": "5.30.2"
 }
 ```
 
@@ -68,7 +70,7 @@ Inspired by Otoroshi's **StaticResponse** plugin:
 | | StaticResponse | SwaggerUI Plugin |
 |---|---|---|
 | Content | Custom body | Fixed HTML (Swagger UI) |
-| Config | body, status, headers | swagger_url, title |
+| Config | body, status, headers | swagger_url, title, swagger_ui_version |
 | Usage | Mock/test | API documentation |
 
 ## License

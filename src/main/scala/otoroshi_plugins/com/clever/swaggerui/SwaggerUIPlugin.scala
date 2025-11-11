@@ -12,7 +12,8 @@ import scala.util.{Failure, Success, Try}
 
 case class SwaggerUIConfig(
   swaggerUrl: String,
-  title: String
+  title: String,
+  swaggerUIVersion: String
 ) extends NgPluginConfig {
   def json: JsValue = SwaggerUIConfig.format.writes(this)
 }
@@ -21,12 +22,14 @@ object SwaggerUIConfig {
   val format = new Format[SwaggerUIConfig] {
     override def writes(o: SwaggerUIConfig): JsValue = Json.obj(
       "swagger_url" -> o.swaggerUrl,
-      "title" -> o.title
+      "title" -> o.title,
+      "swagger_ui_version" -> o.swaggerUIVersion
     )
     override def reads(json: JsValue): JsResult[SwaggerUIConfig] = Try {
       SwaggerUIConfig(
         swaggerUrl = (json \ "swagger_url").as[String],
-        title = (json \ "title").as[String]
+        title = (json \ "title").as[String],
+        swaggerUIVersion = (json \ "swagger_ui_version").asOpt[String].getOrElse("5.30.2")
       )
     } match {
       case Failure(e) => JsError(e.getMessage)
@@ -34,7 +37,7 @@ object SwaggerUIConfig {
     }
   }
 
-  val configFlow: Seq[String] = Seq("swagger_url", "title")
+  val configFlow: Seq[String] = Seq("swagger_url", "title", "swagger_ui_version")
 
   val configSchema: Option[JsObject] = Some(Json.obj(
     "swagger_url" -> Json.obj(
@@ -48,6 +51,12 @@ object SwaggerUIConfig {
       "label" -> "Page Title",
       "placeholder" -> "API Docs",
       "help" -> "Title displayed in the browser tab"
+    ),
+    "swagger_ui_version" -> Json.obj(
+      "type" -> "string",
+      "label" -> "Swagger UI Version",
+      "placeholder" -> "5.30.2",
+      "help" -> "Swagger UI version to load from unpkg.com CDN (default: 5.30.2)"
     )
   ))
 }
@@ -81,7 +90,7 @@ class SwaggerUIPlugin extends NgBackendCall {
 
     ctx.cachedConfig(internalName)(SwaggerUIConfig.format) match {
       case Some(config) =>
-        val htmlContent = generateSwaggerHTML(config.swaggerUrl, config.title)
+        val htmlContent = generateSwaggerHTML(config.swaggerUrl, config.title, config.swaggerUIVersion)
         inMemoryBodyResponse(
           200,
           Map(
@@ -99,14 +108,14 @@ class SwaggerUIPlugin extends NgBackendCall {
     }
   }
 
-  private def generateSwaggerHTML(swaggerUrl: String, title: String): String = {
+  private def generateSwaggerHTML(swaggerUrl: String, title: String, version: String): String = {
     s"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$title</title>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.10.3/swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@$version/swagger-ui.css">
     <style>
         html {
             box-sizing: border-box;
@@ -124,8 +133,8 @@ class SwaggerUIPlugin extends NgBackendCall {
 </head>
 <body>
     <div id="swagger-ui"></div>
-    <script src="https://unpkg.com/swagger-ui-dist@5.30.2/swagger-ui-bundle.js"></script>
-    <script src="https://unpkg.com/swagger-ui-dist@5.30.2/swagger-ui-standalone-preset.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@$version/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@$version/swagger-ui-standalone-preset.js"></script>
     <script>
         window.onload = function() {
             window.ui = SwaggerUIBundle({
