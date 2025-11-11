@@ -1,0 +1,13 @@
+services:
+  otoroshi:
+    image: maif/otoroshi:latest
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    volumes:
+      - ./target/scala-2.12:/opt/plugins
+    environment:
+      OTOROSHI_INITIAL_ADMIN_LOGIN: admin
+      OTOROSHI_INITIAL_ADMIN_PASSWORD: password
+    entrypoint: /bin/sh
+    command: -c 'cd /usr/app && java -Dhttp.port=8080 -Dhttps.port=8443 -cp "/usr/app/otoroshi.jar:/opt/plugins/*" play.core.server.ProdServerStart'
